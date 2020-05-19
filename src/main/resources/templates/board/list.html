@@ -36,6 +36,25 @@
 
     <div class="container">
         <h2>게시판</h2>
+        <div>총 건수 : <span th:text="${#lists.size(boards)}"></span></div>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="board : ${boards}">
+                <td th:text="${board.id}">Mark</td>
+                <td th:text="${board.title}">Otto</td>
+                <td>홍길동</td>
+              </tr>
+          </table>
+          <div class="text-right">
+            <button type="button" class="btn btn-primary">쓰기</button>
+        </div>
     </div>
 
     <!-- Optional JavaScript -->
