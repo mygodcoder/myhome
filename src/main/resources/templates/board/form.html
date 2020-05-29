@@ -16,45 +16,33 @@
 
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('board')">
-        <!-- <a class="navbar-brand" href="#">Spring Boot Tutorial</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">홈 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">게시판</a>
-                </li>
-            </ul>            
-        </div> -->
     </nav>
-
     <div class="container">
         <h2>게시판</h2>
-        <div>총 건수 : <span th:text="${#lists.size(boards)}"></span></div>
-        <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">번호</th>
-                <th scope="col">제목</th>
-                <th scope="col">작성자</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:each="board : ${boards}">
-                <td th:text="${board.id}">Mark</td>
-                <td><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}">Otto</a></td>
-                <td>홍길동</td>
-              </tr>
-          </table>
-          <div class="text-right">
-            <a type="button" class="btn btn-primary" th:href="@{/board/form}">쓰기</a>
-        </div>
+        <form action="#" th:action="@{/board/form}" th:object="${board}" method="post">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" 
+                    th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" th:field="*{title}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                    제목 에러 메시지
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea class="form-control" id="content" rows="3" th:field="*{content}"
+                    th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'"></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
+                    제목 에러 메시지
+                </div>
+            </div>
+            <div class="text-right">
+                <a type="button" class="btn btn-primary" th:href="@{/board/list}">취소</a>
+                <button type="submit" class="btn btn-primary">확인</button>
+            </div>
+        </form>
     </div>
 
     <!-- Optional JavaScript -->
