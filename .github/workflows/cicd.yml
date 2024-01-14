@@ -1,0 +1,32 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SPRING_BOOT_KEY }}" > ~/.ssh/id_rsa
+        chmod 400 ~/.ssh/id_rsa
+        ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
+
+    - name: Build & Test
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.HOST }} '
+          cd myhome &&
+          git pull &&
+          ./mvnw clean package &&     
+          sudo cp target/myhome-1.0.0.jar /var/myhome/myhome-1.0.0.jar
+        '
+
+    - name: Restart
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.HOST }} 'sudo systemctl restart myhome'
